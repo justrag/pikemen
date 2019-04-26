@@ -14,22 +14,31 @@
   justify-content: center;
 }
 
-
 .field span {
   margin: auto;
 }
+
+.movable {
+  box-shadow: 10px 10px 28px 0px rgba(128, 128, 128, 1);
+}
+
+.selected {
+  border: thick solid red;
+}
+
 .even {
   background-color: #fff59d;
 }
 .odd {
   background-color: #bcaaa4;
 }
-.color-red {
+.color-1 {
   color: red;
 }
-.color-blue {
+.color-2 {
   color: blue;
 }
+/*
 .size-1 {
   font-size: large;
 }
@@ -39,31 +48,31 @@
 .size-3 {
   font-size: xx-large;
 }
-
+*/
 .direction-0 {
   transform: rotate(0deg);
 }
-.direction-1 {
+.direction-3 {
   transform: rotate(0deg);
 }
-.direction-2 {
+.direction-4 {
   transform: rotate(45deg);
 }
-.direction-3 {
+.direction-5 {
   transform: rotate(90deg);
 }
-.direction-4 {
+.direction-6 {
   transform: rotate(135deg);
 }
-.direction-5 {
+.direction-7 {
   transform: rotate(180deg);
 }
-.direction-6 {
+.direction-8 {
   transform: rotate(225deg);
 }
-.direction-7 {
+.direction-1 {
   transform: rotate(270deg);
 }
-.direction-8 {
+.direction-2 {
   transform: rotate(295deg);
 }
