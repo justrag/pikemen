@@ -1,28 +1,38 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { useReducer } from 'react';
 import './App.css';
+import { reducer, initialState, getBoard, NONE } from './reducer';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const board = getBoard(state);
+  return (
+    <div className="frame">
+      <div className="chessboard">
+        {board.map(row => row.map(field => <Field {...field} />))}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+const Field = ({ column, row, color, size, direction }) => (
+  <div className={`field ${(column + row) % 2 ? 'even' : 'odd'}`}>
+    {size ? (
+      <Pyramid color={color} size={size} direction={direction} />
+    ) : (
+      <Square column={column} row={row} />
+    )}
+  </div>
+);
+
+const Pyramid = ({ color, size, direction }) => (
+  <span className={`color-${color} size-${size} direction-${direction}`}>
+    <Dots size={size} />
+    {direction !== 'NONE' && <>&#8658;</>}
+  </span>
+);
+
+const Dots = ({ size }) => <>{'O'.repeat(size)}</>;
+
+const Square = ({ column, row }) => <></>;
 
 export default App;

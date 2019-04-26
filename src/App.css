@@ -1,33 +1,69 @@
-.App {
-  text-align: center;
+.chessboard {
+  display: grid;
+  margin: 0 auto;
+  /*grid-template-columns: repeat(8, auto);*/
+  grid-template-columns: repeat(8, 5em);
+  grid-template-rows: repeat(8, 5em);
 }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.field {
+  padding: 20px;
+  color: #000;
+  /*  text-align: center;*/
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+.field span {
+  margin: auto;
+}
+.even {
+  background-color: #fff59d;
+}
+.odd {
+  background-color: #bcaaa4;
+}
+.color-red {
+  color: red;
+}
+.color-blue {
+  color: blue;
+}
+.size-1 {
+  font-size: large;
+}
+.size-2 {
+  font-size: x-large;
+}
+.size-3 {
+  font-size: xx-large;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.direction-0 {
+  transform: rotate(0deg);
+}
+.direction-1 {
+  transform: rotate(0deg);
+}
+.direction-2 {
+  transform: rotate(45deg);
+}
+.direction-3 {
+  transform: rotate(90deg);
+}
+.direction-4 {
+  transform: rotate(135deg);
+}
+.direction-5 {
+  transform: rotate(180deg);
+}
+.direction-6 {
+  transform: rotate(225deg);
+}
+.direction-7 {
+  transform: rotate(270deg);
+}
+.direction-8 {
+  transform: rotate(295deg);
 }
