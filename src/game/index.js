@@ -42,5 +42,5 @@ export const move = (row, column, direction) => {
     }
   }
 
-  return { row, column };
+  return [row, column];
 };

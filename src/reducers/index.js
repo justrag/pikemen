@@ -59,7 +59,7 @@ export const getBoard = (pyramids, selected) => {
     })),
   );
   pyramids.forEach(p => {
-    board[p.row - 1][p.column - 1] = p;
+    board[p.row - 1][p.column - 1] = { ...p };
   });
 
   if (selected) {
@@ -68,8 +68,8 @@ export const getBoard = (pyramids, selected) => {
 
     if (direction !== NONE) {
       while (true) {
-        ({ row, column } = move(row, column, direction));
-
+        [row, column] = move(row, column, direction);
+        console.log({ row, column });
         if (
           row < 0 ||
           row > 7 ||
@@ -94,6 +94,7 @@ const reducer = (state = initialState, { type, payload }) => {
     }
     case movePyramid.type: {
       const { row, column } = payload;
+      console.log({ moveTo: true, row, column });
       return {
         ...state,
         pyramids: state.pyramids.map(p => {
@@ -101,9 +102,11 @@ const reducer = (state = initialState, { type, payload }) => {
             p.row === state.selected.row &&
             p.column === state.selected.column
           ) {
-            p = { ...p, column, row };
+            console.log({ ...p, column, row });
+            return { ...p, column, row };
+          } else {
+            return p;
           }
-          return p;
         }),
       };
     }
