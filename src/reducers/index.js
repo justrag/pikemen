@@ -2,6 +2,28 @@ import { selectPyramid, movePyramid } from '../actions/';
 import { RED, BLUE, NONE, N, NE, E, SE, S, SW, W, NW } from '../constants/';
 import { move } from '../game/';
 
+/* TODO:
+normalize store shape
+it needs to become:
+{
+  pyramids: {
+    big-red-1: {color: RED, size: 3, direction: SE},
+    big-red-2: {color: RED, size: 3, direction: SE},
+    .....
+  },
+  board: [
+    [
+      {pyramid: big-red-1, target: true},
+      {pyramid: null, target: false},
+      {pyramid: null, target: false, selected: true},
+      ...
+    ],
+    [...],
+    ...
+  ]
+}
+*/
+
 export const initialState = {
   pyramids: [
     { color: RED, size: 3, row: 1, column: 1, direction: SE },
