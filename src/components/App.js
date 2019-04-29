@@ -2,11 +2,15 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import './App.css';
 import Field from './Field';
-import { getBoard, getPyramids } from '../reducers/';
+import { getBoard, getPyramids, getSelected } from '../reducers/';
 
 const App = () => {
   const pyramids = useSelector(getPyramids);
-  const board = useMemo(() => getBoard(pyramids), [pyramids]);
+  const selected = useSelector(getSelected);
+  const board = useMemo(() => getBoard(pyramids, selected), [
+    pyramids,
+    selected,
+  ]);
 
   return (
     <div className="frame">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useActions } from 'react-redux';
-import classNames from 'classnames';
+import mergeClassNames from 'classnames';
 import './App.css';
 import { getPlayer, getSelected } from '../reducers/';
 import { NONE } from '../constants/';
@@ -17,7 +17,7 @@ const Pyramid = ({ column, row, color, size, direction }) => {
   const selectHandler =
     player === color ? selectPyramidByRowAndColumn : undefined;
 
-  const classnames = classNames(
+  const classnames = mergeClassNames(
     {
       selected: selected && selected.row === row && selected.column === column,
       movable: player === color,

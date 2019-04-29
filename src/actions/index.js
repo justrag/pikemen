@@ -10,3 +10,4 @@ function createAction(type) {
 }
 
 export const selectPyramid = createAction('SELECT_PYRAMID');
+export const movePyramid = createAction('MOVE_PYRAMID');

@@ -1,6 +1,6 @@
-import { selectPyramid } from '../actions/';
-
+import { selectPyramid, movePyramid } from '../actions/';
 import { RED, BLUE, NONE, N, NE, E, SE, S, SW, W, NW } from '../constants/';
+import { move } from '../game/';
 
 export const initialState = {
   pyramids: [
@@ -51,7 +51,7 @@ export const getPlayer = state => state.player;
 export const getTurn = state => state.turn;
 export const getSelected = state => state.selected;
 
-export const getBoard = pyramids => {
+export const getBoard = (pyramids, selected) => {
   const board = Array.from({ length: 8 }, (val2, row) =>
     Array.from({ length: 8 }, (val1, column) => ({
       row: row + 1,
@@ -61,6 +61,28 @@ export const getBoard = pyramids => {
   pyramids.forEach(p => {
     board[p.row - 1][p.column - 1] = p;
   });
+
+  if (selected) {
+    let { row, column } = selected;
+    const direction = board[row - 1][column - 1].direction;
+
+    if (direction !== NONE) {
+      while (true) {
+        ({ row, column } = move(row, column, direction));
+
+        if (
+          row < 0 ||
+          row > 7 ||
+          column < 0 ||
+          column > 7 ||
+          board[row - 1][column - 1].size
+        ) {
+          break;
+        }
+        board[row - 1][column - 1].target = true;
+      }
+    }
+  }
   return board;
 };
 
@@ -69,6 +91,21 @@ const reducer = (state = initialState, { type, payload }) => {
     case selectPyramid.type: {
       const { row, column } = payload;
       return { ...state, selected: { row, column } };
+    }
+    case movePyramid.type: {
+      const { row, column } = payload;
+      return {
+        ...state,
+        pyramids: state.pyramids.map(p => {
+          if (
+            p.row === state.selected.row &&
+            p.column === state.selected.column
+          ) {
+            p = { ...p, column, row };
+          }
+          return p;
+        }),
+      };
     }
     default: {
       return state;
