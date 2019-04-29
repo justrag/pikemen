@@ -1,0 +1,11 @@
+export const RED = 1;
+export const BLUE = 2;
+export const NONE = 0;
+export const N = 1;
+export const NE = 2;
+export const E = 3;
+export const SE = 4;
+export const S = 5;
+export const SW = 6;
+export const W = 7;
+export const NW = 8;

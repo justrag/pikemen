@@ -9,5 +9,4 @@ function createAction(type) {
   return actionCreator;
 }
 
-const selectAction = createAction('SELECT');
-export { selectAction };
+export const selectPyramid = createAction('SELECT_PYRAMID');

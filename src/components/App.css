@@ -4,6 +4,7 @@
   /*grid-template-columns: repeat(8, auto);*/
   grid-template-columns: repeat(8, 5em);
   grid-template-rows: repeat(8, 5em);
+  user-select: none;
 }
 .field {
   padding: 20px;

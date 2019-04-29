@@ -1,20 +1,8 @@
-import { createSelector } from 'reselect';
+import { selectPyramid } from '../actions/';
 
-import { selectAction } from './action';
+import { RED, BLUE, NONE, N, NE, E, SE, S, SW, W, NW } from '../constants/';
 
-const RED = 1;
-const BLUE = 2;
-const NONE = 0;
-const N = 1;
-const NE = 2;
-const E = 3;
-const SE = 4;
-const S = 5;
-const SW = 6;
-const W = 7;
-const NW = 8;
-
-const initialState = {
+export const initialState = {
   pyramids: [
     { color: RED, size: 3, row: 1, column: 1, direction: SE },
     { color: RED, size: 3, row: 2, column: 1, direction: SE },
@@ -51,7 +39,6 @@ const initialState = {
     { color: BLUE, size: 1, row: 6, column: 6, direction: NW },
     { color: BLUE, size: 1, row: 7, column: 5, direction: NW },
     { color: BLUE, size: 1, row: 8, column: 4, direction: NW },
-
   ],
   player: RED,
   turn: 1,
@@ -59,30 +46,27 @@ const initialState = {
 };
 //const range = size => Array.from({ length: size }, (val, idx) => idx + 1);
 
-const getPyramids = state => state.pyramids;
-const getPlayer = state => state.player;
-const getTurn = state => state.turn;
-const getSelected = state => state.selected;
+export const getPyramids = state => state.pyramids;
+export const getPlayer = state => state.player;
+export const getTurn = state => state.turn;
+export const getSelected = state => state.selected;
 
-const getBoard = createSelector(
-  getPyramids,
-  pyramids => {
-    const board = Array.from({ length: 8 }, (val2, row) =>
-      Array.from({ length: 8 }, (val1, column) => ({
-        row: row + 1,
-        column: column + 1,
-      })),
-    );
-    pyramids.forEach(p => {
-      board[p.row - 1][p.column - 1] = p;
-    });
-    return board;
-  },
-);
+export const getBoard = pyramids => {
+  const board = Array.from({ length: 8 }, (val2, row) =>
+    Array.from({ length: 8 }, (val1, column) => ({
+      row: row + 1,
+      column: column + 1,
+    })),
+  );
+  pyramids.forEach(p => {
+    board[p.row - 1][p.column - 1] = p;
+  });
+  return board;
+};
 
-const reducer = (state, { type, payload }) => {
+const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case selectAction.type: {
+    case selectPyramid.type: {
       const { row, column } = payload;
       return { ...state, selected: { row, column } };
     }
@@ -91,5 +75,4 @@ const reducer = (state, { type, payload }) => {
     }
   }
 };
-
-export { reducer, initialState, getBoard, getPlayer, getSelected, getTurn };
+export default reducer;
