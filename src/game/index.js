@@ -1,45 +1,16 @@
 import { N, NE, E, SE, S, SW, W, NW } from '../constants/';
 export const move = (row, column, direction) => {
-  switch (direction) {
-    case N: {
-      column -= 1;
-      break;
-    }
-    case NE: {
-      column -= 1;
-      row += 1;
-      break;
-    }
-    case E: {
-      row += 1;
-      break;
-    }
-    case SE: {
-      column += 1;
-      row += 1;
-      break;
-    }
-    case S: {
-      column += 1;
-      break;
-    }
-    case SW: {
-      column += 1;
-      row -= 1;
-      break;
-    }
-    case W: {
-      row -= 1;
-      break;
-    }
-    case NW: {
-      column += 1;
-      row -= 1;
-      break;
-    }
-    default: {
-      //
-    }
+  if (direction.includes(N)) {
+    row -= 1;
+  }
+  if (direction.includes(S)) {
+    row += 1;
+  }
+  if (direction.includes(E)) {
+    column += 1;
+  }
+  if (direction.includes(W)) {
+    column -= 1;
   }
 
   return [row, column];

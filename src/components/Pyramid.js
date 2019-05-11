@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useActions } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import mergeClassNames from 'classnames';
 import './App.css';
 import { getPlayer, getSelected } from '../reducers/';
@@ -9,10 +9,8 @@ import { selectPyramid } from '../actions/';
 const Pyramid = ({ column, row, color, size, direction }) => {
   const selected = useSelector(getSelected);
   const player = useSelector(getPlayer);
-  const selectPyramidByRowAndColumn = useActions(
-    () => selectPyramid({ row, column }),
-    [],
-  );
+  const dispatch = useDispatch();
+  const selectPyramidByRowAndColumn = () => dispatch(selectPyramid({ row, column }));
 
   const selectHandler =
     player === color ? selectPyramidByRowAndColumn : undefined;

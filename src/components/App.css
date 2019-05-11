@@ -50,30 +50,30 @@
   font-size: xx-large;
 }
 */
-.direction-0 {
+.direction-NONE {
   transform: rotate(0deg);
 }
-.direction-3 {
+.direction-E {
   transform: rotate(0deg);
 }
-.direction-4 {
+.direction-SE {
   transform: rotate(45deg);
 }
-.direction-5 {
+.direction-S {
   transform: rotate(90deg);
 }
-.direction-6 {
+.direction-SW {
   transform: rotate(135deg);
 }
-.direction-7 {
+.direction-W {
   transform: rotate(180deg);
 }
-.direction-8 {
+.direction-NW {
   transform: rotate(225deg);
 }
-.direction-1 {
+.direction-N {
   transform: rotate(270deg);
 }
-.direction-2 {
+.direction-NE {
   transform: rotate(295deg);
 }
