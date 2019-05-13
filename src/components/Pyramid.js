@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import mergeClassNames from 'classnames';
-import './App.css';
-import { getPlayer, getSelected } from '../reducers/';
+import { getPlayer, getSource, getPyramid } from '../reducers/';
 import { NONE } from '../constants/';
-import { selectPyramid } from '../actions/';
+import { selectSource } from '../actions/';
 
-const Pyramid = ({ column, row, color, size, direction }) => {
-  const selected = useSelector(getSelected);
+const Pyramid = ({ pyramidId }) => {
+  const pyramid = useSelector(state => getPyramid(state, pyramidId), [
+    pyramidId,
+  ]);
+  const { size, color, direction } = pyramid;
+  const source = useSelector(getSource);
   const player = useSelector(getPlayer);
   const dispatch = useDispatch();
-  const selectPyramidByRowAndColumn = () => dispatch(selectPyramid({ row, column }));
 
+  const selectSourceByRowAndColumn = useCallback(
+    () => dispatch(selectSource({ pyramidId })),
+    [pyramidId],
+  );
   const selectHandler =
-    player === color ? selectPyramidByRowAndColumn : undefined;
+    player === color ? selectSourceByRowAndColumn : () => {};
 
   const classnames = mergeClassNames(
     {
-      selected: selected && selected.row === row && selected.column === column,
+      source: source === pyramidId,
       movable: player === color,
     },
     `color-${color}`,

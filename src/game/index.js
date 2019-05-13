@@ -1,4 +1,4 @@
-import { N, NE, E, SE, S, SW, W, NW } from '../constants/';
+import { N, E, S, W } from '../constants/';
 export const move = (row, column, direction) => {
   if (direction.includes(N)) {
     row -= 1;

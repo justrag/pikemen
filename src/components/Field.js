@@ -1,32 +1,31 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import mergeClassNames from 'classnames';
-import './App.css';
+import { getField } from '../reducers/';
 import Pyramid from './Pyramid';
-import { movePyramid } from '../actions/';
+import { selectTarget } from '../actions/';
 
-const Field = ({ column, row, color, size, direction, target }) => {
+const Field = ({ row, column }) => {
+  const field = useSelector(state => getField(state, row, column), [
+    row,
+    column,
+  ]);
+  const { pyramid, targettable } = field;
   const dispatch = useDispatch();
-  const movePyramidToRowAndColumn = useCallback(
-    () => dispatch(movePyramid({ row, column })),
+  const selectTargetByRowAndColumn = useCallback(
+    () => dispatch(selectTarget({ row, column })),
     [row, column],
   );
-  const moveHandler = !target ? () => {} : movePyramidToRowAndColumn;
+  const moveHandler = !targettable ? () => {} : selectTargetByRowAndColumn;
 
   return (
     <div
-      className={mergeClassNames('field', (column + row) % 2 ? 'even' : 'odd')}
-      onClick={() => moveHandler()}
+      className={mergeClassNames('field', (column + row) % 2 ? 'even' : 'odd', targettable)}
+      onClick={moveHandler}
     >
-      {size ? (
-        <Pyramid
-          column={column}
-          row={row}
-          color={color}
-          size={size}
-          direction={direction}
-        />
+      {pyramid ? (
+        <Pyramid pyramidId={pyramid} />
       ) : (
         <Square column={column} row={row} />
       )}
@@ -37,10 +36,7 @@ const Field = ({ column, row, color, size, direction, target }) => {
 Field.propTypes = {
   column: PropTypes.number.isRequired,
   row: PropTypes.number.isRequired,
-  color: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
-  direction: PropTypes.number.isRequired,
-  target: PropTypes.bool.isRequired,
+  pyramidId: PropTypes.string.isRequired,
 };
 
 const Square = ({ column, row }) => <></>;

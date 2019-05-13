@@ -1,23 +1,18 @@
-import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import './App.css';
 import Field from './Field';
-import { getBoard, getPyramids, getSelected } from '../reducers/';
+import range from '../lib/range'
+
+const rows = range(1, 8);
+const columns = range(1, 8);
 
 const App = () => {
-  const pyramids = useSelector(getPyramids);
-  const selected = useSelector(getSelected);
-  const board = useMemo(() => getBoard(pyramids, selected), [
-    pyramids,
-    selected,
-  ]);
-
   return (
     <div className="frame">
       <div className="chessboard">
-        {board.map((row, rowIndex) =>
-          row.map((field, colIndex) => (
-            <Field key={`${rowIndex}${colIndex}`} {...field} />
+        {rows.map(row =>
+          columns.map(column => (
+            <Field key={`${row}${column}`} row={row} column={column} />
           )),
         )}
       </div>
