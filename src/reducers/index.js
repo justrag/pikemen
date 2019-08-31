@@ -197,21 +197,47 @@ const turn = (state = 1, { type, payload }) => {
   return state;
 };
 
-const pyramids = (state = initPyramids, { type, payload }) => {
-  return state;
+const initFullState = () => {
+  return {
+    pyramids: initPyramids,
+    board: initBoard,
+    move: 'something',
+    turn: 'something',
+  };
 };
-const board = (state = initBoard, { type, payload }) => {
+
+const pyramids = (fullState = initFullState, { type, payload }) => {
+  const state = fullState.pyramids;
+  switch (type) {
+    case performMove.type: {
+      const {
+        source,
+        direction,
+      } = 'SOMEHOW GET IT FROM DIFFERENT PIECE OF STORE'; // FIXME
+      const nextState = produce(state, draft => {
+        draft[source].direction = direction;
+      });
+      return nextState;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const board = (fullState = initFullState, { type, payload }) => {
+  const state = fullState.board;
   switch (type) {
     case selectSource.type: {
       const { pyramidId } = payload;
 
       //////////////////////////////////
       // FIXME Need to somehow get pyramids slice access
-      const direction = state.pyramids[pyramidId].direction;
+      const direction = fullState.pyramids[pyramidId].direction;
 
       ///FIXME Iterate through rows and columns
       //and find the field which has pyramidId
-      let [row, column] = Object.entries(state).find();
+      let [row, column] = Object.entries(fullState).find();
 
       if (direction !== NONE) {
         while (true) {
@@ -238,11 +264,22 @@ const board = (state = initBoard, { type, payload }) => {
   }
 };
 
-const reducer = combineReducers({
+const sequentiallyCombineReducers = (fullState, action) => ({
+  board: board(fullState, action),
+  pyramids: pyramids(fullState, action),
+  move: move(fullState.move, action),
+  player: player(fullState.player, action),
+  turn: turn(fullState, turn, action),
+});
+
+const reducer = sequentiallyCombineReducers;
+
+/* const reducer = combineReducers({
   board,
   pyramids,
   move,
   player,
   turn,
 });
+ */
 export default reducer;
