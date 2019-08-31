@@ -1,128 +1,133 @@
 import { combineReducers } from 'redux';
-import R from 'ramda';
-import { selectSource, selectTarget, selectDirection } from '../actions/';
+import produce from 'immer';
+import {
+  selectSource,
+  selectTarget,
+  selectDirection,
+  performMove,
+} from '../actions/';
 import { RED, BLUE, NONE, N, NE, E, SE, S, SW, W, NW } from '../constants/';
 //import { move } from '../game/';
 
 const initBoard = {
   1: {
-    1: { pyramid: 'big-red-1', targettable: false },
-    2: { pyramid: 'big-red-2', targettable: false },
-    3: { pyramid: 'big-red-3', targettable: false },
-    4: { pyramid: 'mid-red-4', targettable: false },
-    5: { pyramid: 'small-red-1', targettable: false },
-    6: { pyramid: null, targettable: false },
-    7: { pyramid: null, targettable: false },
-    8: { pyramid: null, targettable: false },
+    1: { pyramid: 'big-red-1', isTargettable: false, isOnPath: false },
+    2: { pyramid: 'big-red-2', isTargettable: false, isOnPath: false },
+    3: { pyramid: 'big-red-3', isTargettable: false, isOnPath: false },
+    4: { pyramid: 'mid-red-4', isTargettable: false, isOnPath: false },
+    5: { pyramid: 'small-red-1', isTargettable: false, isOnPath: false },
+    6: { pyramid: null, isTargettable: false, isOnPath: false },
+    7: { pyramid: null, isTargettable: false, isOnPath: false },
+    8: { pyramid: null, isTargettable: false, isOnPath: false },
   },
   2: {
-    1: { pyramid: 'big-red-4', targettable: false },
-    2: { pyramid: 'mid-red-1', targettable: false },
-    3: { pyramid: 'mid-red-2', targettable: false },
-    4: { pyramid: 'small-red-2', targettable: false },
-    5: { pyramid: null, targettable: false },
-    6: { pyramid: null, targettable: false },
-    7: { pyramid: null, targettable: false },
-    8: { pyramid: null, targettable: false },
+    1: { pyramid: 'big-red-4', isTargettable: false, isOnPath: false },
+    2: { pyramid: 'mid-red-1', isTargettable: false, isOnPath: false },
+    3: { pyramid: 'mid-red-2', isTargettable: false, isOnPath: false },
+    4: { pyramid: 'small-red-2', isTargettable: false, isOnPath: false },
+    5: { pyramid: null, isTargettable: false, isOnPath: false },
+    6: { pyramid: null, isTargettable: false, isOnPath: false },
+    7: { pyramid: null, isTargettable: false, isOnPath: false },
+    8: { pyramid: null, isTargettable: false, isOnPath: false },
   },
   3: {
-    1: { pyramid: 'big-red-5', targettable: false },
-    2: { pyramid: 'mid-red-3', targettable: false },
-    3: { pyramid: 'small-red-3', targettable: false },
-    4: { pyramid: null, targettable: false },
-    5: { pyramid: null, targettable: false },
-    6: { pyramid: null, targettable: false },
-    7: { pyramid: null, targettable: false },
-    8: { pyramid: null, targettable: false },
+    1: { pyramid: 'big-red-5', isTargettable: false, isOnPath: false },
+    2: { pyramid: 'mid-red-3', isTargettable: false, isOnPath: false },
+    3: { pyramid: 'small-red-3', isTargettable: false, isOnPath: false },
+    4: { pyramid: null, isTargettable: false, isOnPath: false },
+    5: { pyramid: null, isTargettable: false, isOnPath: false },
+    6: { pyramid: null, isTargettable: false, isOnPath: false },
+    7: { pyramid: null, isTargettable: false, isOnPath: false },
+    8: { pyramid: null, isTargettable: false, isOnPath: false },
   },
   4: {
-    1: { pyramid: 'mid-red-5', targettable: false },
-    2: { pyramid: 'small-red-4', targettable: false },
-    3: { pyramid: null, targettable: false },
-    4: { pyramid: null, targettable: false },
-    5: { pyramid: null, targettable: false },
-    6: { pyramid: null, targettable: false },
-    7: { pyramid: null, targettable: false },
-    8: { pyramid: 'small-blue-1', targettable: false },
+    1: { pyramid: 'mid-red-5', isTargettable: false, isOnPath: false },
+    2: { pyramid: 'small-red-4', isTargettable: false, isOnPath: false },
+    3: { pyramid: null, isTargettable: false, isOnPath: false },
+    4: { pyramid: null, isTargettable: false, isOnPath: false },
+    5: { pyramid: null, isTargettable: false, isOnPath: false },
+    6: { pyramid: null, isTargettable: false, isOnPath: false },
+    7: { pyramid: null, isTargettable: false, isOnPath: false },
+    8: { pyramid: 'small-blue-1', isTargettable: false, isOnPath: false },
   },
   5: {
-    1: { pyramid: 'small-red-5', targettable: false },
-    2: { pyramid: null, targettable: false },
-    3: { pyramid: null, targettable: false },
-    4: { pyramid: null, targettable: false },
-    5: { pyramid: null, targettable: false },
-    6: { pyramid: null, targettable: false },
-    7: { pyramid: 'small-blue-2', targettable: false },
-    8: { pyramid: 'mid-blue-1', targettable: false },
+    1: { pyramid: 'small-red-5', isTargettable: false, isOnPath: false },
+    2: { pyramid: null, isTargettable: false, isOnPath: false },
+    3: { pyramid: null, isTargettable: false, isOnPath: false },
+    4: { pyramid: null, isTargettable: false, isOnPath: false },
+    5: { pyramid: null, isTargettable: false, isOnPath: false },
+    6: { pyramid: null, isTargettable: false, isOnPath: false },
+    7: { pyramid: 'small-blue-2', isTargettable: false, isOnPath: false },
+    8: { pyramid: 'mid-blue-1', isTargettable: false, isOnPath: false },
   },
   6: {
-    1: { pyramid: null, targettable: false },
-    2: { pyramid: null, targettable: false },
-    3: { pyramid: null, targettable: false },
-    4: { pyramid: null, targettable: false },
-    5: { pyramid: null, targettable: false },
-    6: { pyramid: 'small-blue-3', targettable: false },
-    7: { pyramid: 'mid-blue-2', targettable: false },
-    8: { pyramid: 'big-blue-1', targettable: false },
+    1: { pyramid: null, isTargettable: false, isOnPath: false },
+    2: { pyramid: null, isTargettable: false, isOnPath: false },
+    3: { pyramid: null, isTargettable: false, isOnPath: false },
+    4: { pyramid: null, isTargettable: false, isOnPath: false },
+    5: { pyramid: null, isTargettable: false, isOnPath: false },
+    6: { pyramid: 'small-blue-3', isTargettable: false, isOnPath: false },
+    7: { pyramid: 'mid-blue-2', isTargettable: false, isOnPath: false },
+    8: { pyramid: 'big-blue-1', isTargettable: false, isOnPath: false },
   },
   7: {
-    1: { pyramid: null, targettable: false },
-    2: { pyramid: null, targettable: false },
-    3: { pyramid: null, targettable: false },
-    4: { pyramid: null, targettable: false },
-    5: { pyramid: 'small-blue-4', targettable: false },
-    6: { pyramid: 'mid-blue-3', targettable: false },
-    7: { pyramid: 'mid-blue-4', targettable: false },
-    8: { pyramid: 'big-blue-2', targettable: false },
+    1: { pyramid: null, isTargettable: false, isOnPath: false },
+    2: { pyramid: null, isTargettable: false, isOnPath: false },
+    3: { pyramid: null, isTargettable: false, isOnPath: false },
+    4: { pyramid: null, isTargettable: false, isOnPath: false },
+    5: { pyramid: 'small-blue-4', isTargettable: false, isOnPath: false },
+    6: { pyramid: 'mid-blue-3', isTargettable: false, isOnPath: false },
+    7: { pyramid: 'mid-blue-4', isTargettable: false, isOnPath: false },
+    8: { pyramid: 'big-blue-2', isTargettable: false, isOnPath: false },
   },
   8: {
-    1: { pyramid: null, targettable: false },
-    2: { pyramid: null, targettable: false },
-    3: { pyramid: null, targettable: false },
-    4: { pyramid: 'small-blue-5', targettable: false },
-    5: { pyramid: 'mid-blue-5', targettable: false },
-    6: { pyramid: 'big-blue-3', targettable: false },
-    7: { pyramid: 'big-blue-4', targettable: false },
-    8: { pyramid: 'big-blue-5', targettable: false },
+    1: { pyramid: null, isTargettable: false, isOnPath: false },
+    2: { pyramid: null, isTargettable: false, isOnPath: false },
+    3: { pyramid: null, isTargettable: false, isOnPath: false },
+    4: { pyramid: 'small-blue-5', isTargettable: false, isOnPath: false },
+    5: { pyramid: 'mid-blue-5', isTargettable: false, isOnPath: false },
+    6: { pyramid: 'big-blue-3', isTargettable: false, isOnPath: false },
+    7: { pyramid: 'big-blue-4', isTargettable: false, isOnPath: false },
+    8: { pyramid: 'big-blue-5', isTargettable: false, isOnPath: false },
   },
 };
 
 const initPyramids = {
-  'big-red-1': { color: RED, size: 3, direction: SE },
-  'big-red-2': { color: RED, size: 3, direction: SE },
-  'big-red-3': { color: RED, size: 3, direction: SE },
-  'big-red-4': { color: RED, size: 3, direction: SE },
-  'big-red-5': { color: RED, size: 3, direction: SE },
+  'big-red-1': { color: RED, size: 3, direction: NONE },
+  'big-red-2': { color: RED, size: 3, direction: NONE },
+  'big-red-3': { color: RED, size: 3, direction: NONE },
+  'big-red-4': { color: RED, size: 3, direction: NONE },
+  'big-red-5': { color: RED, size: 3, direction: NONE },
 
-  'mid-red-1': { color: RED, size: 2, direction: SE },
-  'mid-red-2': { color: RED, size: 2, direction: SE },
-  'mid-red-3': { color: RED, size: 2, direction: SE },
-  'mid-red-4': { color: RED, size: 2, direction: SE },
-  'mid-red-5': { color: RED, size: 2, direction: SE },
+  'mid-red-1': { color: RED, size: 2, direction: NONE },
+  'mid-red-2': { color: RED, size: 2, direction: NONE },
+  'mid-red-3': { color: RED, size: 2, direction: NONE },
+  'mid-red-4': { color: RED, size: 2, direction: NONE },
+  'mid-red-5': { color: RED, size: 2, direction: NONE },
 
-  'small-red-1': { color: RED, size: 1, direction: SE },
-  'small-red-2': { color: RED, size: 1, direction: SE },
-  'small-red-3': { color: RED, size: 1, direction: SE },
-  'small-red-4': { color: RED, size: 1, direction: SE },
-  'small-red-5': { color: RED, size: 1, direction: SE },
+  'small-red-1': { color: RED, size: 1, direction: NONE },
+  'small-red-2': { color: RED, size: 1, direction: NONE },
+  'small-red-3': { color: RED, size: 1, direction: NONE },
+  'small-red-4': { color: RED, size: 1, direction: NONE },
+  'small-red-5': { color: RED, size: 1, direction: NONE },
 
-  'big-blue-1': { color: BLUE, size: 3, direction: SE },
-  'big-blue-2': { color: BLUE, size: 3, direction: SE },
-  'big-blue-3': { color: BLUE, size: 3, direction: SE },
-  'big-blue-4': { color: BLUE, size: 3, direction: SE },
-  'big-blue-5': { color: BLUE, size: 3, direction: SE },
+  'big-blue-1': { color: BLUE, size: 3, direction: NONE },
+  'big-blue-2': { color: BLUE, size: 3, direction: NONE },
+  'big-blue-3': { color: BLUE, size: 3, direction: NONE },
+  'big-blue-4': { color: BLUE, size: 3, direction: NONE },
+  'big-blue-5': { color: BLUE, size: 3, direction: NONE },
 
-  'mid-blue-1': { color: BLUE, size: 2, direction: SE },
-  'mid-blue-2': { color: BLUE, size: 2, direction: SE },
-  'mid-blue-3': { color: BLUE, size: 2, direction: SE },
-  'mid-blue-4': { color: BLUE, size: 2, direction: SE },
-  'mid-blue-5': { color: BLUE, size: 2, direction: SE },
+  'mid-blue-1': { color: BLUE, size: 2, direction: NONE },
+  'mid-blue-2': { color: BLUE, size: 2, direction: NONE },
+  'mid-blue-3': { color: BLUE, size: 2, direction: NONE },
+  'mid-blue-4': { color: BLUE, size: 2, direction: NONE },
+  'mid-blue-5': { color: BLUE, size: 2, direction: NONE },
 
-  'small-blue-1': { color: BLUE, size: 1, direction: SE },
-  'small-blue-2': { color: BLUE, size: 1, direction: SE },
-  'small-blue-3': { color: BLUE, size: 1, direction: SE },
-  'small-blue-4': { color: BLUE, size: 1, direction: SE },
-  'small-blue-5': { color: BLUE, size: 1, direction: SE },
+  'small-blue-1': { color: BLUE, size: 1, direction: NONE },
+  'small-blue-2': { color: BLUE, size: 1, direction: NONE },
+  'small-blue-3': { color: BLUE, size: 1, direction: NONE },
+  'small-blue-4': { color: BLUE, size: 1, direction: NONE },
+  'small-blue-5': { color: BLUE, size: 1, direction: NONE },
 };
 
 export const getPyramid = (state, pyramidId) => state.pyramids[pyramidId];
@@ -132,12 +137,17 @@ export const getTurn = state => state.turn;
 export const getSource = state => state.move.source;
 export const getTarget = state => state.move.target;
 export const getDirection = state => state.move.direction;
+export const getIsMoveReady = state =>
+  getSource(state) && getTarget(state) && getDirection(state);
 
 const source = (state = null, { type, payload }) => {
   switch (type) {
     case selectSource.type: {
       const { pyramidId } = payload;
       return pyramidId;
+    }
+    case performMove.type: {
+      return null;
     }
     default: {
       return state;
@@ -150,6 +160,9 @@ const target = (state = null, { type, payload }) => {
       const { row, column } = payload;
       return { row, column };
     }
+    case performMove.type: {
+      return null;
+    }
     default: {
       return state;
     }
@@ -160,6 +173,9 @@ const direction = (state = null, { type, payload }) => {
     case selectDirection.type: {
       const { direction } = payload;
       return direction;
+    }
+    case performMove.type: {
+      return null;
     }
     default: {
       return state;

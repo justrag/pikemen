@@ -12,3 +12,5 @@ function createAction(type) {
 export const selectSource = createAction('SELECT_SOURCE');
 export const selectTarget = createAction('SELECT_TARGET');
 export const selectDirection = createAction('SELECT_DIRECTION');
+
+export const performMove = createAction('PERFORM_MOVE');

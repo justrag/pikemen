@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { Provider } from 'react-redux';
+import { Provider } from 'reactive-react-redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import App from './components/App';
 import reducer from './reducers/';
