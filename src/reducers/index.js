@@ -9,129 +9,80 @@ import {
 import { RED, BLUE, NONE, N, NE, E, SE, S, SW, W, NW } from '../constants/';
 //import { move } from '../game/';
 
-const initBoard = {
-  1: {
-    1: { pyramid: 'big-red-1', isTargettable: false, isOnPath: false },
-    2: { pyramid: 'big-red-2', isTargettable: false, isOnPath: false },
-    3: { pyramid: 'big-red-3', isTargettable: false, isOnPath: false },
-    4: { pyramid: 'mid-red-4', isTargettable: false, isOnPath: false },
-    5: { pyramid: 'small-red-1', isTargettable: false, isOnPath: false },
-    6: { pyramid: null, isTargettable: false, isOnPath: false },
-    7: { pyramid: null, isTargettable: false, isOnPath: false },
-    8: { pyramid: null, isTargettable: false, isOnPath: false },
-  },
-  2: {
-    1: { pyramid: 'big-red-4', isTargettable: false, isOnPath: false },
-    2: { pyramid: 'mid-red-1', isTargettable: false, isOnPath: false },
-    3: { pyramid: 'mid-red-2', isTargettable: false, isOnPath: false },
-    4: { pyramid: 'small-red-2', isTargettable: false, isOnPath: false },
-    5: { pyramid: null, isTargettable: false, isOnPath: false },
-    6: { pyramid: null, isTargettable: false, isOnPath: false },
-    7: { pyramid: null, isTargettable: false, isOnPath: false },
-    8: { pyramid: null, isTargettable: false, isOnPath: false },
-  },
-  3: {
-    1: { pyramid: 'big-red-5', isTargettable: false, isOnPath: false },
-    2: { pyramid: 'mid-red-3', isTargettable: false, isOnPath: false },
-    3: { pyramid: 'small-red-3', isTargettable: false, isOnPath: false },
-    4: { pyramid: null, isTargettable: false, isOnPath: false },
-    5: { pyramid: null, isTargettable: false, isOnPath: false },
-    6: { pyramid: null, isTargettable: false, isOnPath: false },
-    7: { pyramid: null, isTargettable: false, isOnPath: false },
-    8: { pyramid: null, isTargettable: false, isOnPath: false },
-  },
-  4: {
-    1: { pyramid: 'mid-red-5', isTargettable: false, isOnPath: false },
-    2: { pyramid: 'small-red-4', isTargettable: false, isOnPath: false },
-    3: { pyramid: null, isTargettable: false, isOnPath: false },
-    4: { pyramid: null, isTargettable: false, isOnPath: false },
-    5: { pyramid: null, isTargettable: false, isOnPath: false },
-    6: { pyramid: null, isTargettable: false, isOnPath: false },
-    7: { pyramid: null, isTargettable: false, isOnPath: false },
-    8: { pyramid: 'small-blue-1', isTargettable: false, isOnPath: false },
-  },
-  5: {
-    1: { pyramid: 'small-red-5', isTargettable: false, isOnPath: false },
-    2: { pyramid: null, isTargettable: false, isOnPath: false },
-    3: { pyramid: null, isTargettable: false, isOnPath: false },
-    4: { pyramid: null, isTargettable: false, isOnPath: false },
-    5: { pyramid: null, isTargettable: false, isOnPath: false },
-    6: { pyramid: null, isTargettable: false, isOnPath: false },
-    7: { pyramid: 'small-blue-2', isTargettable: false, isOnPath: false },
-    8: { pyramid: 'mid-blue-1', isTargettable: false, isOnPath: false },
-  },
-  6: {
-    1: { pyramid: null, isTargettable: false, isOnPath: false },
-    2: { pyramid: null, isTargettable: false, isOnPath: false },
-    3: { pyramid: null, isTargettable: false, isOnPath: false },
-    4: { pyramid: null, isTargettable: false, isOnPath: false },
-    5: { pyramid: null, isTargettable: false, isOnPath: false },
-    6: { pyramid: 'small-blue-3', isTargettable: false, isOnPath: false },
-    7: { pyramid: 'mid-blue-2', isTargettable: false, isOnPath: false },
-    8: { pyramid: 'big-blue-1', isTargettable: false, isOnPath: false },
-  },
-  7: {
-    1: { pyramid: null, isTargettable: false, isOnPath: false },
-    2: { pyramid: null, isTargettable: false, isOnPath: false },
-    3: { pyramid: null, isTargettable: false, isOnPath: false },
-    4: { pyramid: null, isTargettable: false, isOnPath: false },
-    5: { pyramid: 'small-blue-4', isTargettable: false, isOnPath: false },
-    6: { pyramid: 'mid-blue-3', isTargettable: false, isOnPath: false },
-    7: { pyramid: 'mid-blue-4', isTargettable: false, isOnPath: false },
-    8: { pyramid: 'big-blue-2', isTargettable: false, isOnPath: false },
-  },
-  8: {
-    1: { pyramid: null, isTargettable: false, isOnPath: false },
-    2: { pyramid: null, isTargettable: false, isOnPath: false },
-    3: { pyramid: null, isTargettable: false, isOnPath: false },
-    4: { pyramid: 'small-blue-5', isTargettable: false, isOnPath: false },
-    5: { pyramid: 'mid-blue-5', isTargettable: false, isOnPath: false },
-    6: { pyramid: 'big-blue-3', isTargettable: false, isOnPath: false },
-    7: { pyramid: 'big-blue-4', isTargettable: false, isOnPath: false },
-    8: { pyramid: 'big-blue-5', isTargettable: false, isOnPath: false },
-  },
+import range from '../lib/range';
+
+const startPosition = {
+  'big-red-1': { color: RED, size: 3, row: 1, column: 1 },
+  'big-red-2': { color: RED, size: 3, row: 1, column: 2 },
+  'big-red-3': { color: RED, size: 3, row: 1, column: 3 },
+  'big-red-4': { color: RED, size: 3, row: 2, column: 1 },
+  'big-red-5': { color: RED, size: 3, row: 3, column: 1 },
+  'mid-red-1': { color: RED, size: 2, row: 2, column: 2 },
+  'mid-red-2': { color: RED, size: 2, row: 2, column: 3 },
+  'mid-red-3': { color: RED, size: 2, row: 3, column: 2 },
+  'mid-red-4': { color: RED, size: 2, row: 1, column: 4 },
+  'mid-red-5': { color: RED, size: 2, row: 4, column: 1 },
+  'small-red-1': { color: RED, size: 1, row: 1, column: 5 },
+  'small-red-2': { color: RED, size: 1, row: 2, column: 4 },
+  'small-red-3': { color: RED, size: 1, row: 3, column: 3 },
+  'small-red-4': { color: RED, size: 1, row: 4, column: 2 },
+  'small-red-5': { color: RED, size: 1, row: 5, column: 1 },
+  'big-blue-1': { color: BLUE, size: 3, row: 6, column: 8 },
+  'big-blue-2': { color: BLUE, size: 3, row: 7, column: 8 },
+  'big-blue-3': { color: BLUE, size: 3, row: 8, column: 6 },
+  'big-blue-4': { color: BLUE, size: 3, row: 8, column: 7 },
+  'big-blue-5': { color: BLUE, size: 3, row: 8, column: 8 },
+  'mid-blue-1': { color: BLUE, size: 2, row: 5, column: 8 },
+  'mid-blue-2': { color: BLUE, size: 2, row: 6, column: 7 },
+  'mid-blue-3': { color: BLUE, size: 2, row: 7, column: 6 },
+  'mid-blue-4': { color: BLUE, size: 2, row: 7, column: 7 },
+  'mid-blue-5': { color: BLUE, size: 2, row: 8, column: 5 },
+  'small-blue-1': { color: BLUE, size: 1, row: 4, column: 8 },
+  'small-blue-2': { color: BLUE, size: 1, row: 5, column: 7 },
+  'small-blue-3': { color: BLUE, size: 1, row: 6, column: 6 },
+  'small-blue-4': { color: BLUE, size: 1, row: 7, column: 5 },
+  'small-blue-5': { color: BLUE, size: 1, row: 8, column: 4 },
 };
 
-const initPyramids = {
-  'big-red-1': { color: RED, size: 3, direction: NONE },
-  'big-red-2': { color: RED, size: 3, direction: NONE },
-  'big-red-3': { color: RED, size: 3, direction: NONE },
-  'big-red-4': { color: RED, size: 3, direction: NONE },
-  'big-red-5': { color: RED, size: 3, direction: NONE },
+const one2eight = range(1, 8);
 
-  'mid-red-1': { color: RED, size: 2, direction: NONE },
-  'mid-red-2': { color: RED, size: 2, direction: NONE },
-  'mid-red-3': { color: RED, size: 2, direction: NONE },
-  'mid-red-4': { color: RED, size: 2, direction: NONE },
-  'mid-red-5': { color: RED, size: 2, direction: NONE },
+const initBoard = {};
+one2eight.forEach(row => {
+  one2eight.forEach(column => {
+    initBoard[`${row}-${column}`] = {
+      row,
+      column,
+      pyramid: null,
+      isTargettable: false,
+      isOnPath: false,
+    };
+  });
+});
 
-  'small-red-1': { color: RED, size: 1, direction: NONE },
-  'small-red-2': { color: RED, size: 1, direction: NONE },
-  'small-red-3': { color: RED, size: 1, direction: NONE },
-  'small-red-4': { color: RED, size: 1, direction: NONE },
-  'small-red-5': { color: RED, size: 1, direction: NONE },
+// {
+//   1-1: {row: 1, column: 1, pyramid: null, isTargettable: false, isOnPath: false },
+//   1-2: {row: 1, column: 2, pyramid: null, isTargettable: false, isOnPath: false },
+// ...
+// }
 
-  'big-blue-1': { color: BLUE, size: 3, direction: NONE },
-  'big-blue-2': { color: BLUE, size: 3, direction: NONE },
-  'big-blue-3': { color: BLUE, size: 3, direction: NONE },
-  'big-blue-4': { color: BLUE, size: 3, direction: NONE },
-  'big-blue-5': { color: BLUE, size: 3, direction: NONE },
+Object.entries(startPosition).forEach(([pyramidId, { row, column }]) => {
+  initBoard[`${row}-${column}`].pyramid = pyramidId;
+});
 
-  'mid-blue-1': { color: BLUE, size: 2, direction: NONE },
-  'mid-blue-2': { color: BLUE, size: 2, direction: NONE },
-  'mid-blue-3': { color: BLUE, size: 2, direction: NONE },
-  'mid-blue-4': { color: BLUE, size: 2, direction: NONE },
-  'mid-blue-5': { color: BLUE, size: 2, direction: NONE },
-
-  'small-blue-1': { color: BLUE, size: 1, direction: NONE },
-  'small-blue-2': { color: BLUE, size: 1, direction: NONE },
-  'small-blue-3': { color: BLUE, size: 1, direction: NONE },
-  'small-blue-4': { color: BLUE, size: 1, direction: NONE },
-  'small-blue-5': { color: BLUE, size: 1, direction: NONE },
-};
+const initPyramids = Object.entries(startPosition).reduce(
+  (pyramids, [key, { color, size }]) => ({
+    ...pyramids,
+    [key]: {
+      color,
+      size,
+      direction: NONE,
+    },
+  }),
+  {},
+);
 
 export const getPyramid = (state, pyramidId) => state.pyramids[pyramidId];
-export const getField = (state, row, column) => state.board[row][column];
+export const getField = (state, row, column) => state.board[`${row}-${column}`];
 export const getPlayer = state => state.player;
 export const getTurn = state => state.turn;
 export const getSource = state => state.move.source;
@@ -160,6 +111,7 @@ const target = (state = null, { type, payload }) => {
       const { row, column } = payload;
       return { row, column };
     }
+    case selectSource.type:
     case performMove.type: {
       return null;
     }
@@ -174,6 +126,8 @@ const direction = (state = null, { type, payload }) => {
       const { direction } = payload;
       return direction;
     }
+    case selectSource.type:
+    case selectTarget.type:
     case performMove.type: {
       return null;
     }
@@ -189,20 +143,45 @@ const move = combineReducers({
   direction,
 });
 
-const player = (state = RED, { type, payload }) => {
-  return state;
+const player = (state = initPlayer, { type, payload }) => {
+  switch (type) {
+    case performMove.type: {
+      return state === RED ? BLUE : RED;
+    }
+    default: {
+      return state;
+    }
+  }
 };
 
-const turn = (state = 1, { type, payload }) => {
-  return state;
+const initPlayer = RED;
+
+const turn = (fullState = initFullState, { type, payload }) => {
+  const state = fullState.turn;
+  switch (type) {
+    case performMove.type: {
+      const player = fullState.player;
+      if (player === BLUE) {
+        return state + 1;
+      } else {
+        return state;
+      }
+    }
+    default: {
+      return state;
+    }
+  }
 };
+
+const initTurn = 1;
 
 const initFullState = () => {
   return {
     pyramids: initPyramids,
     board: initBoard,
-    move: 'something',
-    turn: 'something',
+    move: move(undefined, {}),
+    turn: initTurn,
+    player: initPlayer,
   };
 };
 
@@ -210,10 +189,7 @@ const pyramids = (fullState = initFullState, { type, payload }) => {
   const state = fullState.pyramids;
   switch (type) {
     case performMove.type: {
-      const {
-        source,
-        direction,
-      } = 'SOMEHOW GET IT FROM DIFFERENT PIECE OF STORE'; // FIXME
+      const { source, direction } = fullState.move;
       const nextState = produce(state, draft => {
         draft[source].direction = direction;
       });
@@ -229,34 +205,32 @@ const board = (fullState = initFullState, { type, payload }) => {
   const state = fullState.board;
   switch (type) {
     case selectSource.type: {
-      const { pyramidId } = payload;
+      const nextState = produce(state, draft => {
+        const { pyramidId } = payload;
+        const direction = fullState.pyramids[pyramidId].direction;
 
-      //////////////////////////////////
-      // FIXME Need to somehow get pyramids slice access
-      const direction = fullState.pyramids[pyramidId].direction;
+        let { row, column } = Object.values(draft).find(
+          ({ pyramid }) => pyramid === pyramidId,
+        );
 
-      ///FIXME Iterate through rows and columns
-      //and find the field which has pyramidId
-      let [row, column] = Object.entries(fullState).find();
-
-      if (direction !== NONE) {
-        while (true) {
-          [row, column] = move(row, column, direction);
-          console.log({ row, column });
-          if (
-            row < 1 ||
-            row > 8 ||
-            column < 1 ||
-            column > 8 ||
-            state[row][column].pyramidId
-          ) {
-            break;
+        if (direction !== NONE) {
+          while (true) {
+            [row, column] = move(row, column, direction);
+            console.log({ row, column });
+            if (
+              row < 1 ||
+              row > 8 ||
+              column < 1 ||
+              column > 8 ||
+              draft[`${row}-${column}`].pyramid
+            ) {
+              break;
+            }
+            draft[`${row}-${column}`].isTargettable = true;
           }
-          state[row][column] = { ...state[row][column], target: true };
         }
-      }
-      return board;
-      ///////////////////////////////
+      });
+      return nextState;
     }
     default: {
       return state;
@@ -265,11 +239,11 @@ const board = (fullState = initFullState, { type, payload }) => {
 };
 
 const sequentiallyCombineReducers = (fullState, action) => ({
-  board: board(fullState, action),
-  pyramids: pyramids(fullState, action),
   move: move(fullState.move, action),
+  pyramids: pyramids(fullState, action),
+  board: board(fullState, action),
+  turn: turn(fullState, action),
   player: player(fullState.player, action),
-  turn: turn(fullState, turn, action),
 });
 
 const reducer = sequentiallyCombineReducers;
