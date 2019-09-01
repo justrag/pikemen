@@ -9,3 +9,4 @@ export const S = 'S';
 export const SW = 'SW';
 export const W = 'W';
 export const NW = 'NW';
+export const OFFBOARD = 'OFFBOARD';

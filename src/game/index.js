@@ -1,4 +1,4 @@
-import { N, E, S, W } from '../constants/';
+import { N, E, S, W, OFFBOARD } from '../constants/';
 export const move = (row, column, direction) => {
   if (direction.includes(N)) {
     row -= 1;
@@ -13,5 +13,9 @@ export const move = (row, column, direction) => {
     column -= 1;
   }
 
-  return [row, column];
+  if (row < 1 || row > 8 || column < 1 || column > 8) {
+    return OFFBOARD;
+  }
+
+  return `${row}-${column}`;
 };
